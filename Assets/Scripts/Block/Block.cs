@@ -11,7 +11,7 @@ public enum BlockType
 
 public class Block : MonoBehaviour
 {
-    private int hp = 1;
+    private int hp = 14;
 
     [SerializeField]
     private Material[] mat = new Material[3];

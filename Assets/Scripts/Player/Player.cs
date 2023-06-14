@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WeaponType
+{
+    Fire = 0,
+    Ice = 1,
+    Wood = 2
+}
+
 public class Player : MonoBehaviour
 {
     // 공격
     [SerializeField]
     private AttackRange attackRange;
-    public int Damage = 1;
     public bool GuardMode = false;
+    public WeaponType Type = WeaponType.Fire;
 
     // 이동
-    public int Index = 0;
+    public int Index = 1;
     bool isGround = true;
     bool isMoving = false;
     public float moveTime = 0.45f;
@@ -44,6 +51,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        Index = 1;
         attackRange.Off();
     }
     #endregion
@@ -149,7 +157,7 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (Index < 0)
+        if (Index < 1)
         {
             return;
         }
@@ -165,13 +173,20 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (Index > 0)
+        if (Index > 1)
         {
             return;
         }
 
         Index++;
         StartCoroutine(CMove(Vector3.right * 2));
+    }
+
+    public void ChangeType(int typeNum)
+    {
+        Type = ((WeaponType)typeNum);
+
+        // !!! 이펙트 추가하기
     }
     #endregion
 }

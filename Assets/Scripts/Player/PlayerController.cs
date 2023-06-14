@@ -22,6 +22,22 @@ public class PlayerController : MonoBehaviour
     void TempInput()
     {
         // for test
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            // Fire type
+            player.ChangeType(0);
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            // Ice type
+            player.ChangeType(1);
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            // Wood type
+            player.ChangeType(2);
+        }
+
         if (Input.GetKeyDown(KeyCode.Z))
         {
             // Attack

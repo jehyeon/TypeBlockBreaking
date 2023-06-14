@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,12 +43,47 @@ public class Blocks : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void Attacked(int index, int damage)
+    public void Attacked(int index, WeaponType type)
     {
-        // index 0ºÎÅÍ ¿ŞÂÊ
+        // index 0ë¶€í„° ì™¼ìª½
+        int damage;
+        int weaponType = (int)type;
+        int targetType = (int)target[index].Type;
+
+        if (weaponType == targetType)
+        {
+            // ë™ì¼í•œ ì†ì„±ì¸ ê²½ìš°
+            damage = 5;
+        }
+        else
+        {
+            if (weaponType == 0)
+            {
+                damage = targetType == 1
+                    ? 3
+                    : 15;
+            }
+            else if (weaponType == 1)
+            {
+                damage = targetType == 2
+                    ? 3
+                    : 15;
+            }
+            else
+            {
+                damage = targetType == 0
+                    ? 3
+                    : 15;
+            }
+        }
+
+        Debug.Log(type);
+        Debug.Log(target[index].Type);
+        Debug.Log(damage);
+
         if (target[index].Attacked(damage))
         {
-            // target block hp < 0ÀÌ¸é
+            // target block hp < 0ì´ë©´
             for (int i = 0; i < 3; i++)
             {
                 BlockPool.Instance.ReturnBlock(target[i]);
@@ -57,7 +92,7 @@ public class Blocks : MonoBehaviour
 
             if (blocks.Count < 1)
             {
-                // blockÀÌ ¾ø´Â °æ¿ì
+                // blockì´ ì—†ëŠ” ê²½ìš°
                 Clear();
             }
             else
