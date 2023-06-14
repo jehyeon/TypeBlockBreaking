@@ -3,3 +3,4 @@
 - /Assets/Stylize Snow Texture/
 - /Assets/Stylized Lava PBR Texture/
 - /Assets/Stylized Wood Textures/
+- /Assets/Magical-Knight_Set/
