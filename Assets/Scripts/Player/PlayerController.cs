@@ -28,6 +28,17 @@ public class PlayerController : MonoBehaviour
             player.Attack();
         }
 
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            // Guard
+            player.Guard();
+        }
+        if (Input.GetKeyUp(KeyCode.DownArrow))
+        {
+            // Guard
+            player.CancelGuard();
+        }
+
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             player.Jump();

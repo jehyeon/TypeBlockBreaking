@@ -1,10 +1,17 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    int position = 0;
+    // 공격
+    [SerializeField]
+    private AttackRange attackRange;
+    public int Damage = 1;
+    public bool GuardMode = false;
+
+    // 이동
+    public int Index = 0;
     bool isGround = true;
     bool isMoving = false;
     public float moveTime = 0.45f;
@@ -13,15 +20,62 @@ public class Player : MonoBehaviour
     private Animator animator;
     private Rigidbody rigid;
 
+    public float TempGroundGuardPower = 10f;
+    public float Power
+    { 
+        get
+        {
+            if (isGround)
+            {
+                return TempGroundGuardPower;
+            }
+
+            return rigid.velocity.y;
+        }
+    }
+
+    // Init
+    #region "Init"
     void Awake()
     {
         animator = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
     }
 
+    void Start()
+    {
+        attackRange.Off();
+    }
+    #endregion
+
+    #region "Act"
+    IEnumerator CAttack()
+    {
+        attackRange.On();
+        yield return new WaitForSeconds(0.1f);
+        attackRange.Off();
+    }
+
     public void Attack()
     {
+        StartCoroutine(CAttack());
+    }
 
+    public void Guard()
+    {
+        GuardMode = true;
+        attackRange.On();
+    }
+
+    public void CancelGuard()
+    {
+        GuardMode = false;
+        attackRange.Off();
+    }
+
+    public void Guarded(float blocksPower)
+    {
+        rigid.AddForce(Vector3.down * blocksPower, ForceMode.Impulse);
     }
 
     IEnumerator CJump()
@@ -32,7 +86,7 @@ public class Player : MonoBehaviour
 
         rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.05f);
 
         while (transform.position.y > 10.0f)
         {
@@ -92,12 +146,12 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (position < 0)
+        if (Index < 0)
         {
             return;
         }
 
-        position--;
+        Index--;
         StartCoroutine(CMove(Vector3.left * 2));
     }
 
@@ -108,17 +162,13 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (position > 0)
+        if (Index > 0)
         {
             return;
         }
 
-        position++;
+        Index++;
         StartCoroutine(CMove(Vector3.right * 2));
     }
-
-    IEnumerator CMoveRight()
-    {
-        yield return null;
-    }
+    #endregion
 }

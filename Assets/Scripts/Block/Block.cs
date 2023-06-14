@@ -11,15 +11,28 @@ public enum BlockType
 
 public class Block : MonoBehaviour
 {
+    private int hp = 1;
+
     [SerializeField]
     private Material[] mat = new Material[3];
 
+    public BlockType Type;
+
     public void ChangeType(BlockType type)
     {
+        Type = type;
         gameObject.GetComponent<MeshRenderer>().material = mat[(int)type];
     }
     public void ChangeType(int type)
     {
+        Type = (BlockType)type;
         gameObject.GetComponent<MeshRenderer>().material = mat[type];
+    }
+
+    public bool Attacked(int damage)
+    {
+        hp -= damage;
+
+        return hp < 0;
     }
 }

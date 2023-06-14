@@ -19,20 +19,22 @@ public class GameManager : MonoBehaviour
     }
 
     // Managers
-    public BlockManager blockManager;
+    public BlockManager BlockManager;
 
     private int round = 0;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
-    }
+        if (null == instance)
+        {
+            instance = this;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Round
