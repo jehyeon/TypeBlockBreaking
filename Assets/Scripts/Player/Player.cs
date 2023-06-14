@@ -52,6 +52,7 @@ public class Player : MonoBehaviour
     IEnumerator CAttack()
     {
         attackRange.On();
+        animator.SetTrigger("attack");
         yield return new WaitForSeconds(0.1f);
         attackRange.Off();
     }
@@ -63,12 +64,14 @@ public class Player : MonoBehaviour
 
     public void Guard()
     {
+        animator.SetBool("isGuard", true);
         GuardMode = true;
         attackRange.On();
     }
 
     public void CancelGuard()
     {
+        animator.SetBool("isGuard", false);
         GuardMode = false;
         attackRange.Off();
     }
