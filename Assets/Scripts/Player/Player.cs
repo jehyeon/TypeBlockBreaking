@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     private AttackRange attackRange;
     public bool GuardMode = false;
     public WeaponType Type = WeaponType.Fire;
+    [SerializeField]
+    private ParticleSystem[] attackEffect = new ParticleSystem[3];
 
     // 이동
     public int Index = 1;
@@ -69,6 +71,7 @@ public class Player : MonoBehaviour
     IEnumerator CAttack()
     {
         attackRange.On();
+        attackEffect[(int)Type].Play();
         animator.SetTrigger("attack");
         yield return new WaitForSeconds(0.1f);
         attackRange.Off();
@@ -211,7 +214,9 @@ public class Player : MonoBehaviour
     {
         Type = ((WeaponType)typeNum);
 
-        // !!! 이펙트 추가하기
+        // 마법 부여 애니메이션
+        // 검기 이펙트 수정
+        // 마법 부여 이펙트 수정
     }
     #endregion
 

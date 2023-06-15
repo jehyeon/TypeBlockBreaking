@@ -8,4 +8,5 @@
 - /Assets/TextMesh Pro/
 - /Assets/PureNature/
 - /Assets/Dungeon Ground/
-/Assets/Skybox/
+- /Assets/Skybox/
+- /Assets/Hovl Studio/
