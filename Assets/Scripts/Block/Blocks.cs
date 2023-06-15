@@ -79,6 +79,8 @@ public class Blocks : MonoBehaviour
 
         if (target[index].Attacked(damage))
         {
+            SoundManager.Instance.PlayBreakSound();
+
             // target block hp < 0이면
             for (int i = 0; i < 3; i++)
             {

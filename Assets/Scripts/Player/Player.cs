@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private AttackRange attackRange;
     public bool GuardMode = false;
-    public WeaponType Type = WeaponType.Fire;
+    public WeaponType Type;
     [SerializeField]
     private ParticleSystem[] attackEffect = new ParticleSystem[3];
     [SerializeField]
@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     bool isGround = true;
     bool isMoving = false;
     bool isHit = false;
+    bool isAttack = false;
     public float moveTime = 0.45f;
     public float jumpPower = 5.0f;
 
@@ -66,23 +67,31 @@ public class Player : MonoBehaviour
 
         nowHp = maxHp;
         UIManager.Instance.UpdateHPSlider(nowHp, maxHp);
-        ChangeType(0);
+
+        Type = WeaponType.Wood;     // temp
+        ChangeType(0, false);
     }
     #endregion
 
     #region "Act"
     IEnumerator CAttack()
     {
+        isAttack = true;
         attackRange.On();
         attackEffect[(int)Type].Play();
+        SoundManager.Instance.PlayAttackSound();
         animator.SetTrigger("attack");
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
         attackRange.Off();
+        isAttack = false;
     }
 
     public void Attack()
     {
-        StartCoroutine(CAttack());
+        if (!isAttack)
+        {
+            StartCoroutine(CAttack());
+        }
     }
 
     public void Guard()
@@ -101,6 +110,7 @@ public class Player : MonoBehaviour
 
     public void Guarded(float blocksPower)
     {
+        SoundManager.Instance.PlayGuardSound();
         rigid.AddForce(Vector3.down * blocksPower, ForceMode.Impulse);
     }
 
@@ -109,15 +119,8 @@ public class Player : MonoBehaviour
         nowHp--;
         UIManager.Instance.UpdateHPSlider(nowHp, maxHp);
 
-        //StartCoroutine(Hit());
         animator.SetTrigger("hit");
-    }
-
-    IEnumerator Hit()
-    {
-        animator.SetTrigger("hit");
-        yield return new WaitForSeconds(0.2f);
-        isHit = false;
+        SoundManager.Instance.PlayAttackedSound();
     }
 
     IEnumerator CJump()
@@ -125,6 +128,7 @@ public class Player : MonoBehaviour
         isGround = false;
         animator.SetBool("isGround", false);
         animator.SetTrigger("jump");
+        SoundManager.Instance.PlayJumpSound();
 
         rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
 
@@ -154,6 +158,7 @@ public class Player : MonoBehaviour
     {
         isMoving = true;
         animator.SetBool("isMoving", true);
+        SoundManager.Instance.PlayMoveSound();
         float elapsedTime = 0.0f;
 
         if (dir.x > 0)
@@ -199,7 +204,7 @@ public class Player : MonoBehaviour
 
     public void MoveRight()
     {
-        if (!isGround || isMoving || isHit)
+        if (!isGround || isMoving)
         {
             return;
         }
@@ -213,8 +218,13 @@ public class Player : MonoBehaviour
         StartCoroutine(CMove(Vector3.right * 2));
     }
 
-    public void ChangeType(int typeNum)
+    public void ChangeType(int typeNum, bool soundPlay = true)
     {
+        if (typeNum == (int)Type)
+        {
+            return;
+        }
+
         Type = ((WeaponType)typeNum);
 
         for (int i = 0; i < 3; i++)
@@ -223,9 +233,11 @@ public class Player : MonoBehaviour
         }
         attackAura[typeNum].gameObject.SetActive(true);
         attackAura[typeNum].Play();
-        // 마법 부여 애니메이션
-        // 검기 이펙트 수정
-        // 마법 부여 이펙트 수정
+
+        if (soundPlay)
+        {
+            SoundManager.Instance.PlayEnchantSound();
+        }
     }
     #endregion
 

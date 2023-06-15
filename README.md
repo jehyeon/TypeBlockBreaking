@@ -10,3 +10,5 @@
 - /Assets/Dungeon Ground/
 - /Assets/Skybox/
 - /Assets/Hovl Studio/
+- /Assets/Sword Attack Music Pack 1.0/
+/Assets/A.M.P. DEMO/
