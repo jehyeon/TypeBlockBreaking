@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     public WeaponType Type = WeaponType.Fire;
     [SerializeField]
     private ParticleSystem[] attackEffect = new ParticleSystem[3];
+    [SerializeField]
+    private ParticleSystem[] attackAura = new ParticleSystem[3];
 
     // 이동
     public int Index = 1;
@@ -64,6 +66,7 @@ public class Player : MonoBehaviour
 
         nowHp = maxHp;
         UIManager.Instance.UpdateHPSlider(nowHp, maxHp);
+        ChangeType(0);
     }
     #endregion
 
@@ -214,6 +217,12 @@ public class Player : MonoBehaviour
     {
         Type = ((WeaponType)typeNum);
 
+        for (int i = 0; i < 3; i++)
+        {
+            attackAura[i].gameObject.SetActive(false);
+        }
+        attackAura[typeNum].gameObject.SetActive(true);
+        attackAura[typeNum].Play();
         // 마법 부여 애니메이션
         // 검기 이펙트 수정
         // 마법 부여 이펙트 수정
