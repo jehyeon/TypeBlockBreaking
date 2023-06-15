@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
 
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -45,6 +46,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1;
+
         seq.Enqueue(new List<int>() { 0 });
         seq.Enqueue(new List<int>() { 1 });
         seq.Enqueue(new List<int>() { 2 });
@@ -82,19 +85,23 @@ public class GameManager : MonoBehaviour
     public void UpBreakBlockCount()
     {
         breakCount++;
-        // UI 업데이트
+        UIManager.Instance.UpdateSkillPercent(breakCount);
     }
 
     public void ClearBreakBlockCount()
     {
         breakCount = 0;
-        // UI 업데이트
+        UIManager.Instance.UpdateSkillPercent(breakCount);
     }
 
     public void GameOver()
     {
+        Time.timeScale = 0;
+        UIManager.Instance.OpenGameOverUI(round);
+    }
 
-
-
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);
     }
 }

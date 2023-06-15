@@ -5,14 +5,9 @@ using UnityEngine;
 public class AttackRange : MonoBehaviour
 {
     private Player Player;
-    private BoxCollider col;
-
-    public float blocksTempPower = 1f;
-    public float playerTempPower = 1f;
 
     void Awake()
     {
-        col = GetComponent<BoxCollider>();
         Player = transform.parent.GetComponent<Player>();
     }
 
@@ -37,8 +32,8 @@ public class AttackRange : MonoBehaviour
             }
             else
             {
-                Player.Guarded(blocks.Power * blocksTempPower);
-                blocks.Guarded(Player.Power * playerTempPower);
+                Player.Guarded(blocks.Power);
+                blocks.Guarded(Player.Power);
             }
         }
     }

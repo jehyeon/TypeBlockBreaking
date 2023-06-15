@@ -18,8 +18,8 @@ public class FollowPlayer : MonoBehaviour
         {
             transform.position = new Vector3
             (
-                offset.x, 
-                player.transform.position.y + offset.y, 
+                offset.x,
+                player.transform.position.y + offset.y,
                 offset.z
             );
         }

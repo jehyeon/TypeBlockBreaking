@@ -28,14 +28,14 @@ public class Player : MonoBehaviour
     bool isHit = false;
     bool isAttack = false;
     public float moveTime = 0.45f;
-    public float jumpPower = 5.0f;
+    public float jumpPower = 3.5f;
 
     private Animator animator;
     private Rigidbody rigid;
 
     // 기타
     private int nowHp;
-    private int maxHp = 50;
+    private int maxHp = 5;
 
     // 스킬
     public bool FireSwordMode = false;
@@ -46,18 +46,16 @@ public class Player : MonoBehaviour
     [SerializeField]
     private ParticleSystem heal;
 
-    public float TempGroundGuardPower = 10f;
-    public float TempAttackedBouncePower = 50f;
     public float Power
     {
         get
         {
             if (isGround)
             {
-                return TempGroundGuardPower;
+                return 50.0f;
             }
 
-            return rigid.velocity.y;
+            return 30.0f;
         }
     }
 
@@ -133,6 +131,7 @@ public class Player : MonoBehaviour
 
     public void Guarded(float blocksPower)
     {
+        CancelGuard();
         SoundManager.Instance.PlayGuardSound();
         rigid.AddForce(Vector3.down * blocksPower, ForceMode.Impulse);
     }
@@ -144,6 +143,16 @@ public class Player : MonoBehaviour
 
         animator.SetTrigger("hit");
         SoundManager.Instance.PlayAttackedSound();
+
+        if (nowHp < 1)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        GameManager.Instance.GameOver();
     }
 
     IEnumerator CJump()
@@ -282,10 +291,10 @@ public class Player : MonoBehaviour
     #region "Skill"
     public void Skill()
     {
-        //if (GameManager.Instance.BreakCount < 10)
-        //{
-        //    return;
-        //}
+        if (GameManager.Instance.BreakCount < 12)
+        {
+            return;
+        }
 
         if (!isGround)
         {
@@ -304,6 +313,8 @@ public class Player : MonoBehaviour
                 Heal();
                 break;
         }
+
+        GameManager.Instance.ClearBreakBlockCount();
     }
 
     IEnumerator CFireSword()
@@ -397,7 +408,7 @@ public class Player : MonoBehaviour
         {
             // 바닥에 있을 때 블럭과 충돌하면
             Attacked();
-            other.gameObject.GetComponent<Blocks>().Guarded(TempAttackedBouncePower);      // 다시 팅겨나감
+            other.gameObject.GetComponent<Blocks>().Guarded(100f);      // 다시 팅겨나감
         }
     }
 }

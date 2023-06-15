@@ -10,6 +10,11 @@ public class UIManager : MonoBehaviour
     private TextMeshProUGUI roundText;      // 라운드
     [SerializeField]
     private Slider hpSlider;                // 체력
+    [SerializeField]
+    private GameObject goGameoverUI;
+
+    [SerializeField]
+    private SkillUI skillUI;
 
     private static UIManager instance = null;
     public static UIManager Instance { get { return instance; } }
@@ -20,7 +25,7 @@ public class UIManager : MonoBehaviour
         {
             instance = this;
 
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -37,5 +42,16 @@ public class UIManager : MonoBehaviour
     public void UpdateHPSlider(int now, int max)
     {
         hpSlider.value = (float)now / (float)max;
+    }
+
+    public void OpenGameOverUI(int round)
+    {
+        goGameoverUI.GetComponent<GameoverUI>().Gameover(round);
+        goGameoverUI.SetActive(true);
+    }
+
+    public void UpdateSkillPercent(int count)
+    {
+        skillUI.UpdatePercent(count);
     }
 }

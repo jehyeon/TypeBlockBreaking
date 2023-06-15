@@ -13,7 +13,7 @@ public class Blocks : MonoBehaviour
 
     private Rigidbody rigid;
 
-    public float Power { get { return rigid.velocity.y * -1; } }
+    public float Power { get { return 3.0f; } }
 
     void Awake()
     {
@@ -109,6 +109,7 @@ public class Blocks : MonoBehaviour
 
     public void Guarded(float guardPower)
     {
+        rigid.velocity = Vector3.zero;
         rigid.AddForce(Vector3.up * guardPower, ForceMode.Impulse);
     }
 

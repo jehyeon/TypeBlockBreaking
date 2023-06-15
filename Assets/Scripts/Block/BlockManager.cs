@@ -7,7 +7,7 @@ public class BlockManager : MonoBehaviour
     [SerializeField]
     private Blocks blocks;
 
-    public Vector3 BlocksSpawnPos = new Vector3(0, 30.0f, 0);
+    public Vector3 BlocksSpawnPos = new Vector3(0, 20.0f, 0);
 
     public void CreateBlocks(int floor, List<int> blockTypes)
     {
