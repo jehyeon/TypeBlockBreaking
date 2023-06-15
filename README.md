@@ -6,3 +6,6 @@
 - /Assets/Magical-Knight_Set/
 - /Assets/GUI PRO Kit - Fantasy RPG/
 - /Assets/TextMesh Pro/
+- /Assets/PureNature/
+- /Assets/Dungeon Ground/
+/Assets/Skybox/
