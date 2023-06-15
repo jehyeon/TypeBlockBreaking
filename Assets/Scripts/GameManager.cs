@@ -90,4 +90,11 @@ public class GameManager : MonoBehaviour
         breakCount = 0;
         // UI 업데이트
     }
+
+    public void GameOver()
+    {
+
+
+
+    }
 }

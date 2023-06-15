@@ -105,6 +105,18 @@ public class Player : MonoBehaviour
         }
     }
 
+    IEnumerator TempGuard()
+    {
+        Guard();
+        yield return new WaitForSeconds(0.4f);
+        CancelGuard();
+    }
+
+    public void GuardBtn()
+    {
+        StartCoroutine(TempGuard());
+    }
+
     public void Guard()
     {
         animator.SetBool("isGuard", true);
@@ -227,6 +239,20 @@ public class Player : MonoBehaviour
 
         Index++;
         StartCoroutine(CMove(Vector3.right * 2));
+    }
+    public void ChangeFireType()
+    {
+        ChangeType(0);
+    }
+
+    public void ChangeIceType()
+    {
+        ChangeType(1);
+    }
+
+    public void ChangeWoodType()
+    {
+        ChangeType(2);
     }
 
     public void ChangeType(int typeNum, bool soundPlay = true)
@@ -361,6 +387,7 @@ public class Player : MonoBehaviour
         animator.SetTrigger("woodSkill");
         SoundManager.Instance.PlayWoodSkillSound();
         nowHp = maxHp;
+        UIManager.Instance.UpdateHPSlider(nowHp, maxHp);
     }
 
     #endregion
