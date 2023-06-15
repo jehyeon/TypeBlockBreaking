@@ -5,3 +5,4 @@
 - /Assets/Stylized Wood Textures/
 - /Assets/Magical-Knight_Set/
 - /Assets/GUI PRO Kit - Fantasy RPG/
+- /Assets/TextMesh Pro/
