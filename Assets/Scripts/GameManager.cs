@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
 
     // Managers
     public BlockManager BlockManager;
+    public UIManager UIManager;
+
     Queue<List<int>> seq = new Queue<List<int>>();
     private List<int> blockTypes;
     private int floorCount = 5;
@@ -55,6 +57,9 @@ public class GameManager : MonoBehaviour
     // Round
     private void StartRound()
     {
+        round++;
+        UIManager.Instance.UpdateRoundUI(round);
+
         if (seq.Count > 0)
         {
             blockTypes = seq.Dequeue();
@@ -69,7 +74,6 @@ public class GameManager : MonoBehaviour
 
     public void EndRound()
     {
-        round++;
         Invoke("StartRound", 5f);
     }
 }

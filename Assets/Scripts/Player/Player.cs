@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,15 +21,21 @@ public class Player : MonoBehaviour
     public int Index = 1;
     bool isGround = true;
     bool isMoving = false;
+    bool isHit = false;
     public float moveTime = 0.45f;
     public float jumpPower = 5.0f;
 
     private Animator animator;
     private Rigidbody rigid;
 
+    // 기타
+    private int nowHp;
+    private int maxHp = 50;
+
     public float TempGroundGuardPower = 10f;
+    public float TempAttackedBouncePower = 50f;
     public float Power
-    { 
+    {
         get
         {
             if (isGround)
@@ -53,6 +59,9 @@ public class Player : MonoBehaviour
     {
         Index = 1;
         attackRange.Off();
+
+        nowHp = maxHp;
+        UIManager.Instance.UpdateHPSlider(nowHp, maxHp);
     }
     #endregion
 
@@ -87,6 +96,22 @@ public class Player : MonoBehaviour
     public void Guarded(float blocksPower)
     {
         rigid.AddForce(Vector3.down * blocksPower, ForceMode.Impulse);
+    }
+
+    private void Attacked()
+    {
+        nowHp--;
+        UIManager.Instance.UpdateHPSlider(nowHp, maxHp);
+
+        //StartCoroutine(Hit());
+        animator.SetTrigger("hit");
+    }
+
+    IEnumerator Hit()
+    {
+        animator.SetTrigger("hit");
+        yield return new WaitForSeconds(0.2f);
+        isHit = false;
     }
 
     IEnumerator CJump()
@@ -168,7 +193,7 @@ public class Player : MonoBehaviour
 
     public void MoveRight()
     {
-        if (!isGround || isMoving)
+        if (!isGround || isMoving || isHit)
         {
             return;
         }
@@ -189,4 +214,14 @@ public class Player : MonoBehaviour
         // !!! 이펙트 추가하기
     }
     #endregion
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Blocks") && isGround)
+        {
+            // 바닥에 있을 때 블럭과 충돌하면
+            Attacked();
+            other.gameObject.GetComponent<Blocks>().Guarded(TempAttackedBouncePower);      // 다시 팅겨나감
+        }
+    }
 }
