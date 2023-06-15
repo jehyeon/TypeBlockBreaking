@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -76,10 +76,6 @@ public class Blocks : MonoBehaviour
                     : 15;
             }
         }
-
-        Debug.Log(type);
-        Debug.Log(target[index].Type);
-        Debug.Log(damage);
 
         if (target[index].Attacked(damage))
         {
