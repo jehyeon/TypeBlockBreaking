@@ -37,6 +37,15 @@ public class Player : MonoBehaviour
     private int nowHp;
     private int maxHp = 50;
 
+    // 스킬
+    public bool FireSwordMode = false;
+    [SerializeField]
+    private ParticleSystem fireSkillAura;
+    [SerializeField]
+    private GameObject iceAge;
+    [SerializeField]
+    private ParticleSystem heal;
+
     public float TempGroundGuardPower = 10f;
     public float TempAttackedBouncePower = 50f;
     public float Power
@@ -70,6 +79,8 @@ public class Player : MonoBehaviour
 
         Type = WeaponType.Wood;     // temp
         ChangeType(0, false);
+
+        iceAge.SetActive(false);
     }
     #endregion
 
@@ -220,7 +231,7 @@ public class Player : MonoBehaviour
 
     public void ChangeType(int typeNum, bool soundPlay = true)
     {
-        if (typeNum == (int)Type)
+        if (typeNum == (int)Type || FireSwordMode)
         {
             return;
         }
@@ -239,8 +250,120 @@ public class Player : MonoBehaviour
             SoundManager.Instance.PlayEnchantSound();
         }
     }
+
     #endregion
 
+    #region "Skill"
+    public void Skill()
+    {
+        //if (GameManager.Instance.BreakCount < 10)
+        //{
+        //    return;
+        //}
+
+        if (!isGround)
+        {
+            return;
+        }
+
+        switch (Type)
+        {
+            case WeaponType.Fire:
+                FireSword();
+                break;
+            case WeaponType.Ice:
+                Froze();
+                break;
+            case WeaponType.Wood:
+                Heal();
+                break;
+        }
+    }
+
+    IEnumerator CFireSword()
+    {
+        FireSwordMode = true;
+        animator.SetTrigger("fireSkill");
+        yield return new WaitForSeconds(.5f);
+        for (int i = 0; i < 3; i++)
+        {
+            attackAura[i].gameObject.SetActive(false);
+        }
+        fireSkillAura.gameObject.SetActive(true);
+
+        SoundManager.Instance.PlayFireSkillSound();
+
+        yield return new WaitForSeconds(9f);
+        fireSkillAura.gameObject.SetActive(false);
+
+        attackAura[(int)Type].gameObject.SetActive(true);
+        attackAura[(int)Type].Play();
+
+        FireSwordMode = false;
+    }
+
+    private void FireSword()
+    {
+        StartCoroutine(CFireSword());
+    }
+
+    IEnumerator IceAge()
+    {
+        animator.SetTrigger("iceSkill");
+        SoundManager.Instance.PlayIceSkillSound();
+
+        iceAge.SetActive(true);
+        
+        float elapsedTime = 0.0f;
+
+        Vector3 originPos = new Vector3(0, 6f, 0);
+        iceAge.transform.position = originPos;
+
+        Vector3 targetPos = new Vector3(0, 10f, 0);
+
+        while (elapsedTime < moveTime)
+        {
+            iceAge.transform.position = Vector3.Lerp(originPos, targetPos, elapsedTime / moveTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        iceAge.transform.position = targetPos;
+
+        yield return new WaitForSeconds(15f);
+
+        elapsedTime = 0.0f;
+        while (elapsedTime < moveTime)
+        {
+            iceAge.transform.position = Vector3.Lerp(targetPos, originPos, elapsedTime / moveTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        iceAge.SetActive(false);
+    }
+
+    private void Froze()
+    {
+        StartCoroutine(IceAge());
+    }
+
+    IEnumerator HealSkill()
+    {
+        heal.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        heal.gameObject.SetActive(false);
+    }
+
+    private void Heal()
+    {
+        StartCoroutine(HealSkill());
+        animator.SetTrigger("woodSkill");
+        SoundManager.Instance.PlayWoodSkillSound();
+        nowHp = maxHp;
+    }
+
+    #endregion
     void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Blocks") && isGround)

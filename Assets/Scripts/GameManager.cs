@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     private List<int> blockTypes;
     private int floorCount = 5;
     private int round = 0;
+    private int breakCount = 0;
+    public int BreakCount { get { return breakCount; } }
 
     void Awake()
     {
@@ -75,5 +77,17 @@ public class GameManager : MonoBehaviour
     public void EndRound()
     {
         Invoke("StartRound", 5f);
+    }
+
+    public void UpBreakBlockCount()
+    {
+        breakCount++;
+        // UI 업데이트
+    }
+
+    public void ClearBreakBlockCount()
+    {
+        breakCount = 0;
+        // UI 업데이트
     }
 }

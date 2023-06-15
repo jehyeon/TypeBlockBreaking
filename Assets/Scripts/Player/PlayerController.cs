@@ -38,6 +38,12 @@ public class PlayerController : MonoBehaviour
             player.ChangeType(2);
         }
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            // Wood type
+            player.Skill();
+        }
+
         if (Input.GetKeyDown(KeyCode.Z))
         {
             // Attack

@@ -43,42 +43,46 @@ public class Blocks : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void Attacked(int index, WeaponType type)
+    public void Attacked(int index, WeaponType type, bool fireSwordMode = false)
     {
         // index 0부터 왼쪽
-        int damage;
+        int damage = 15;
         int weaponType = (int)type;
         int targetType = (int)target[index].Type;
 
-        if (weaponType == targetType)
+        if (!fireSwordMode)
         {
-            // 동일한 속성인 경우
-            damage = 5;
-        }
-        else
-        {
-            if (weaponType == 0)
+            if (weaponType == targetType)
             {
-                damage = targetType == 1
-                    ? 3
-                    : 15;
-            }
-            else if (weaponType == 1)
-            {
-                damage = targetType == 2
-                    ? 3
-                    : 15;
+                // 동일한 속성인 경우
+                damage = 5;
             }
             else
             {
-                damage = targetType == 0
-                    ? 3
-                    : 15;
+                if (weaponType == 0)
+                {
+                    damage = targetType == 1
+                        ? 3
+                        : 15;
+                }
+                else if (weaponType == 1)
+                {
+                    damage = targetType == 2
+                        ? 3
+                        : 15;
+                }
+                else
+                {
+                    damage = targetType == 0
+                        ? 3
+                        : 15;
+                }
             }
         }
 
         if (target[index].Attacked(damage))
         {
+            GameManager.Instance.UpBreakBlockCount();
             SoundManager.Instance.PlayBreakSound();
 
             // target block hp < 0이면

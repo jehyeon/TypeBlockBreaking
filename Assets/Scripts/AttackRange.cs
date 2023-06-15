@@ -33,7 +33,7 @@ public class AttackRange : MonoBehaviour
             Blocks blocks = other.GetComponent<Blocks>();
             if (!Player.GuardMode)
             {
-                blocks.Attacked(Player.Index, Player.Type);
+                blocks.Attacked(Player.Index, Player.Type, Player.FireSwordMode);
             }
             else
             {

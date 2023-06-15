@@ -18,6 +18,12 @@ public class SoundManager : MonoBehaviour
     private AudioSource jumpSound;
     [SerializeField]
     private AudioSource enchantSound;
+    [SerializeField]
+    private AudioSource fireSkillSound;
+    [SerializeField]
+    private AudioSource iceSkillSound;
+    [SerializeField]
+    private AudioSource woodSkillSound;
 
     private static SoundManager instance = null;
     public static SoundManager Instance { get { return instance; } }
@@ -69,5 +75,20 @@ public class SoundManager : MonoBehaviour
     public void PlayEnchantSound()
     {
         enchantSound.Play();
+    }
+
+    public void PlayFireSkillSound()
+    {
+        fireSkillSound.Play();
+    }
+
+    public void PlayIceSkillSound()
+    {
+        iceSkillSound.Play();
+    }
+
+    public void PlayWoodSkillSound()
+    {
+        woodSkillSound.Play();
     }
 }
